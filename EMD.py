@@ -1,13 +1,12 @@
 import openai
 
-from GPT.util import ASST, DEPT, FOOD, LAW, MODEL, POLL, USER, findEntities, kNNRetrieval, randomRetrieval, textGeneration
+from util import ASST, DEPT, FOOD, LAW, MODEL, POLL, USER, findEntities, kNNRetrieval, randomRetrieval, textGeneration
 
 
 question1 = "I'm an excellent linguist. The task is to label "
 question2 = " entities in the given sentences"
 question3 = ". Below are some examples."
 question4 = "in the form of @@location1, location2, ...##."
-question5 = " Please use Chinese."
 
 
 def prepareExamples(sentence: str, examples):
@@ -58,7 +57,7 @@ def EMDWithNoExamples(sentence: str, entity):
     messages = []
     messages.append({
         "role": USER,
-        "content": question1 + entity["name"] + question2 + question4 + question5
+        "content": question1 + entity["name"] + question2 + question4
     })
     response = openai.ChatCompletion.create(MODEL, messages)
 
@@ -83,7 +82,7 @@ def EMDWithExamples(sentence: str, entity):
     messages = []
     messages.append({
         "role": USER,
-        "content": question1 + entity["name"] + question2 + question3 + question5
+        "content": question1 + entity["name"] + question2 + question3
     })
     response = openai.ChatCompletion.create(MODEL, messages)
 

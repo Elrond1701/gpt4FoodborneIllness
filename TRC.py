@@ -1,6 +1,6 @@
 from openai.embeddings_utils import cosine_similarity, get_embedding
 
-from GPT.util import EMBEDDING_MODEL
+from util import EMBEDDING_MODEL
 
 def TRC(sentence: str, labels = ["This sentence indicates a possible foodborne illness incidient", 
                                  "This sentence doesn't indicate a possible foodborne illness incidient"]):

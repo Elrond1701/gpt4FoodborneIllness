@@ -1,6 +1,6 @@
 import openai
-from GPT.EMD import EMD
-from GPT.util import ASST, MODEL, USER
+from EMD import EMD
+from util import ASST, MODEL, USER
 
 question1 = "I'm an excellent linguist. The task is to check the whether the giving entity in the given sentences is "
 question2 = "the food that caused the foodborne illness. "
