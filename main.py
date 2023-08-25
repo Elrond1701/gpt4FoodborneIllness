@@ -3,27 +3,24 @@ import json
 import os
 import pickle
 import openai
-from sklearn.metrics import confusion_matrix
+
+from API import getApiKey
+openai.api_key = getApiKey()
+
+from sklearn.metrics import classification_report, confusion_matrix
 from EMD import EMD
 from SF import SF
 
-from TRC import TRC
+from TRC import TRC, label_embeddings
 
 
 # os.environ["HTTP_PROXY"] = proxy
 # os.environ["HTTPS_PROXY"] = proxy
 
 
-def getApiKey():
-    openai_key_file = 'openaiKey.json'
-    with open(openai_key_file, 'r', encoding='utf-8') as f:
-        openai_key = json.loads(f.read())
-    return openai_key['api']
-
 def oneTask(sentence: str, task: str, examples=False):
     if task == "TRC":
-        answer = TRC(sentence)
-        return 1 if answer == "relevant" else 0
+        return TRC(sentence, label_embeddings)
     elif task == "EMD":
         return EMD(sentence, examples)
     elif task == "SF":
@@ -43,6 +40,7 @@ def test(args):
     dat = dat.rename(columns={'tweet': 'sentence'})
     true = []
     pred = []
+    i = 0
     for _, data in dat.iterrows():
         res = oneTask(data["sentence"], args.task)
         if args.task == "TRC":
@@ -54,7 +52,14 @@ def test(args):
         elif args.task == "SF":
             true.append(data[""])
             pred.append(res)
-    confusion_matrix(y_true=true, y_pred=pred)
+        i += 1
+        print("Times: " + str(i) + ", _: " + str(_))
+        if i >= 50:
+            break
+    p = classification_report(y_true=true, y_pred=pred)
+    print(p)
+    print(true)
+    print(pred)
     return true, pred
 
 
@@ -64,7 +69,7 @@ def show(args):
         if sentence == "finish":
             break
         res = oneTask(sentence, args.task)
-        print(args.task + ": " + str(res))
+        print(args.task + ": " + res)
 
 
 def predict(args):
@@ -89,7 +94,6 @@ def predict(args):
 
 
 if __name__ == "__main__":
-    openai.api_key = getApiKey()
     parser = argparse.ArgumentParser()
     parser.add_argument("--type", default="show", type=str)
     parser.add_argument("--task", default="TRC", type=str)
