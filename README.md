@@ -41,3 +41,7 @@ not fully implement.
 sample size与accuracy的图
 
 in-context learning与few-shot
+
+in-context learning 相近还是多样性
+
+数据平衡
