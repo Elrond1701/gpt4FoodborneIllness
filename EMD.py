@@ -53,6 +53,7 @@ def prepareExamples(sentence: str, examples):
             "example": LAW_EXAMPLES
         }]
 
+
 def EMDWithNoExamples(sentence: str, entity):
     messages = []
     messages.append({
@@ -110,7 +111,6 @@ def EMDWithExamples(sentence: str, entity):
     answer = response["choices"][0]["text"]
     answer = findEntities(answer)
     return answer
-
 
 
 def EMD(sentence: str, examples="None"):

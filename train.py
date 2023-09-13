@@ -1,17 +1,16 @@
-from openai.embeddings_utils import get_embedding
-from main import readtestfile
+import openai
+import pandas
+from API import getApiKey
+from util import readfile
 
-from util import EMBEDDING_MODEL
+openai.api_key = getApiKey()
 
+from TRC import embedding
 
-def EMBEDDING(sentence):
-    return get_embedding(sentence, engine=EMBEDDING_MODEL)
 
 if __name__ == "__main__":
-    dat = readtestfile("data/English/LREC_expert_label/dev.p")
-    dat = dat["tweet"]
-    # print(dat)
-    # print(type(dat))
-    new_dat = dat.apply(EMBEDDING)
-    new_dat.to_csv("data/English/LREC_expert_label/dev.csv", index=False)
-    # label_embeddings = [get_embedding(label, engine=EMBEDDING_MODEL) for label in labels]
+    openai.api_key = getApiKey()
+    dat = readfile("data/English/LREC_BSC/train.p")
+    dat = pandas.concat([dat["tweet"].apply(embedding), dat["sentence_class"]], axis=1)
+    dat.to_csv("data/English/LREC_BSC/train.csv", index=True)
+    # new_dat.to_csv("data/English/LREC_expert_label/dev.csv", index=False)

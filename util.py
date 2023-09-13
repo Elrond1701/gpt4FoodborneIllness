@@ -1,8 +1,10 @@
+import json
+import pickle
 import random
 import re
+import numpy as np
 
 import pandas
-from openai.embeddings_utils import cosine_similarity, get_embedding
 from sklearn.neighbors import NearestNeighbors
 
 
@@ -44,10 +46,10 @@ def kNNRetrieval(sentence, size=5):
     dat = pandas.read_json("./GPT/data/admin.jsonl", lines=True)
     embeddings = []
     for i in range(len(dat) - 1):
-        embeddings.append(get_embedding(dat.loc[i]["text"], EMBEDDING_MODEL))
+        embeddings.append(embedding(dat.iloc[i]['text']))
     knn = NearestNeighbors(n_neighbors=size)
     knn.fit(embeddings)
-    _, row = knn.kneighbors([get_embedding(sentence, EMBEDDING_MODEL)])
+    _, row = knn.kneighbors([embedding(sentence)])
     return dat.loc[row].reset_index(drop=True)
 
 
@@ -85,3 +87,22 @@ def labelInput(input, labels, entity):
             pos[j][0] += 4
             pos[j][1] += 4
     return output
+
+
+def readfile(file):
+    file = open(file, "rb")
+    return pickle.load(file)
+
+
+def string_to_numpy_array(s):
+    return np.array(s.split(), dtype=np.float64)
+
+
+def load_dat(english=True):
+    if english is True:
+        with open("./data/English/base.json", "r") as file:
+            dat = json.load(file)
+    else:
+        with open("./data/Chinese/base.json", "r") as file:
+            dat = json.load(file)
+    return dat

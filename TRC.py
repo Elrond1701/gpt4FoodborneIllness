@@ -1,23 +1,22 @@
-import time
 from openai.embeddings_utils import cosine_similarity, get_embedding
 
 from util import EMBEDDING_MODEL
 
 
-labels = ["Relevent with foodborne illness.", 
-          "Not Relevent with foodborne illness."]
-label_embeddings = [get_embedding(label, engine=EMBEDDING_MODEL) for label in labels]
-time.sleep(60)
+def embedding(sentence):
+    return get_embedding(sentence, engine=EMBEDDING_MODEL)
 
 
-def TRC(sentence: str, label_embeddings):
-    def label_score(review_embedding, label_embeddings):
-        return cosine_similarity(review_embedding, label_embeddings[1]) - cosine_similarity(review_embedding, label_embeddings[0])
-    
+label_embeddings = [embedding(label) for label in ["Relevent with foodborne illness.", "Not Relevent with foodborne illness."]]
 
-    probas = label_score(get_embedding(sentence, engine=EMBEDDING_MODEL), label_embeddings)
-    preds = "irrelevant" if probas > 0 else "relevant"
 
-    time.sleep(20)
+def label_score(review_embedding):
+    return cosine_similarity(review_embedding, label_embeddings[1]) - cosine_similarity(review_embedding, label_embeddings[0])
 
-    return preds
+
+def TRC(sentence: str, model=None):
+    if model is None:
+        probas = label_score(get_embedding(sentence, engine=EMBEDDING_MODEL), label_embeddings)
+        return 1 if probas > 0 else 0
+    else:
+        return model.inference(sentence, embedding(sentence))

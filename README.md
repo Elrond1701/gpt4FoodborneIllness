@@ -4,9 +4,7 @@
 
 gptfoodborneillness@gmail.com
 
-## Method
-
-### EMD
+## EMD
 
 使用上下文学习的技术来提升效果，包括以下部分：
 
@@ -26,7 +24,7 @@ c. 从一个数据集中选取k个例子，但是选择的k个例子采用k近�
 
 3. 输入需要进行标注的句子进行达标。
 
-### TRC
+## TRC
 
 该部分的工作原理是进行词向量映射，将一段英文/中文语句通过GPT提供的text-embedding-ada-002映射为一个高维词向量$x$，然后比较$x$与“有相关性”（使用`This sentence indicates a possible foodborne illness incidient`作为比较对象）的距离和$x$与“无相关性”（使用`This sentence doesn't indicate a possible foodborne illness incidient`作为比较对象）的距离的差值。
 
@@ -34,8 +32,12 @@ c. 从一个数据集中选取k个例子，但是选择的k个例子采用k近�
 
 使用`cosine_similarity`函数作为距离的度量。
 
-## SF
+<!-- ## SF
 
 not fully implement.
 
-不过和EMD差不多。
+不过和EMD差不多。 -->
+
+sample size与accuracy的图
+
+in-context learning与few-shot
