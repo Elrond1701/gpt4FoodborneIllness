@@ -2,7 +2,7 @@ import argparse
 
 import pandas as pd
 
-from scripts.TRC import TRC
+from scripts.TRC import TRC_embedding, TRC_in_context
 
 
 if __name__ == "__main__":
@@ -16,7 +16,11 @@ if __name__ == "__main__":
 
     if args.name is None:
         pass
-    elif args.name == "TRC":
+    elif args.name == "TRC_embedding":
         train_dat = pd.read_csv(args.train_file)
         test_dat = pd.read_csv(args.test_file)
-        print(TRC(model_name=args.model_name, train_dat=train_dat, test_dat=test_dat))
+        print(TRC_embedding(model_name=args.model_name, train_dat=train_dat, test_dat=test_dat))
+    elif args.name == "TRC_in_context":
+        train_dat = pd.read_pickle(args.train_file)
+        test_dat = pd.read_pickle(args.test_file)
+        print(TRC_in_context(train_dat=train_dat, test_dat=test_dat))

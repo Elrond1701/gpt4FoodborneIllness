@@ -24,6 +24,8 @@ ASST = "assistant"
 
 proxy = ""
 
+SEED = 42
+
 
 def findEntities(sentence):
     pattern = r'\@\@(.*?)\#\#'
